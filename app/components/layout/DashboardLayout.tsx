@@ -1,10 +1,10 @@
-'use client';
+﻿'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 import { useAppSelector } from '@/lib/hooks';
-import { redirect } from 'next/navigation';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -12,9 +12,16 @@ interface DashboardLayoutProps {
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.replace('/login');
+    }
+  }, [isAuthenticated, router]);
 
   if (!isAuthenticated) {
-    redirect('/login');
+    return null;
   }
 
   return (

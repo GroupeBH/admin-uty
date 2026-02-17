@@ -241,3 +241,34 @@ export interface RolePermissions {
   permissions: Permission[];
 }
 
+// Currency Types
+export interface Currency {
+  id: string;
+  code: string;
+  name: string;
+  symbol: string;
+  isActive: boolean;
+  exchangeRate: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Shop Types
+export interface Shop {
+  id: string;
+  name: string;
+  description?: string;
+  logo?: string;
+  ownerIdCard?: string;
+  isActive: boolean;
+  user: User;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Auth/API DTO Types
+export interface AuthTokens {
+  accessToken: string;
+  refreshToken: string;
+}
+

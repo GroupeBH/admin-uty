@@ -26,6 +26,7 @@ export default function OrdersPage() {
     page,
     limit: 10,
     status: filters.status,
+    search: filters.search,
   });
 
   const [updateOrderStatus] = useUpdateOrderStatusMutation();
@@ -241,7 +242,12 @@ export default function OrdersPage() {
               <Option value="DELIVERED">Livrée</Option>
               <Option value="DISPUTED">Litige</Option>
             </Select>
-            <Button icon={<Filter className="w-4 h-4" />}>Réinitialiser</Button>
+            <Button
+              icon={<Filter className="w-4 h-4" />}
+              onClick={() => setFilters({ status: '', search: '' })}
+            >
+              Réinitialiser
+            </Button>
           </div>
         </div>
 
