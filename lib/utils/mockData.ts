@@ -16,6 +16,7 @@ import {
   AuctionStatus,
   ModerationFlag,
   DashboardStats,
+  FieldType,
 } from '../types';
 
 // Mock Users
@@ -69,7 +70,7 @@ export const mockCategories: Category[] = [
       {
         id: 'f1',
         name: 'Marque',
-        type: 'LIST',
+        type: FieldType.LIST,
         required: true,
         options: ['Apple', 'Samsung', 'Sony', 'LG'],
         order: 1,
@@ -77,7 +78,7 @@ export const mockCategories: Category[] = [
       {
         id: 'f2',
         name: 'État',
-        type: 'LIST',
+        type: FieldType.LIST,
         required: true,
         options: ['Neuf', 'Très bon état', 'Bon état', 'Correct'],
         order: 2,
@@ -97,7 +98,7 @@ export const mockCategories: Category[] = [
       {
         id: 'f3',
         name: 'Taille',
-        type: 'LIST',
+        type: FieldType.LIST,
         required: true,
         options: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
         order: 1,
@@ -105,7 +106,7 @@ export const mockCategories: Category[] = [
       {
         id: 'f4',
         name: 'Couleur',
-        type: 'TEXT',
+        type: FieldType.TEXT,
         required: true,
         order: 2,
       },
