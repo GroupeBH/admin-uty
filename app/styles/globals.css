@@ -87,3 +87,84 @@ a {
 .stat-card-orange {
   @apply bg-gradient-to-br from-orange-500 to-orange-600 text-white;
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes utyHeroEnter {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes utyPhoneFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+.uty-hero-enter {
+  animation: utyHeroEnter 0.72s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.uty-hero-enter:nth-child(2) {
+  animation-delay: 90ms;
+}
+
+.uty-hero-enter:nth-child(3) {
+  animation-delay: 180ms;
+}
+
+.uty-hero-enter:nth-child(4) {
+  animation-delay: 270ms;
+}
+
+.uty-hero-enter:nth-child(5) {
+  animation-delay: 360ms;
+}
+
+.uty-phone-float {
+  animation: utyPhoneFloat 5s ease-in-out infinite;
+}
+
+.uty-phone-float:nth-of-type(2) {
+  animation-delay: 1.4s;
+}
+
+.uty-lift {
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+}
+
+.uty-lift:hover {
+  transform: translateY(-4px);
+  border-color: rgba(31, 79, 140, 0.18);
+  box-shadow: 0 24px 70px rgba(31, 79, 140, 0.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .uty-hero-enter,
+  .uty-phone-float,
+  .uty-lift,
+  .uty-lift:hover {
+    animation: none;
+    transform: none;
+    transition: none;
+  }
+}

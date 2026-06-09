@@ -9,8 +9,9 @@ interface Props {
 }
 
 export const metadata = {
-  title: 'UTY Admin - Interface d\'administration',
-  description: 'Interface d\'administration complète pour la plateforme UTY',
+  title: 'Uty - Marketplace, livraison et support',
+  description:
+    'Plateforme publique pour presenter Uty, guider les utilisateurs et telecharger l application Android officielle.',
 };
 
 export default function RootLayout({ children }: Props) {
