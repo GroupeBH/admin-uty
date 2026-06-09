@@ -18,6 +18,9 @@ import {
 
 const ANDROID_DOWNLOAD_URL =
   'https://play.google.com/store/apps/details?id=com.uty&pcampaignid=web_share';
+const SUPPORT_PHONE_DISPLAY = '+243 831 919 710';
+const SUPPORT_PHONE_HREF = '+243831919710';
+const SUPPORT_EMAIL = 'contact.gbh.sarl@gmail.com';
 
 const platformHighlights = [
   {
@@ -326,13 +329,22 @@ export default function HomePage() {
                 Les consignes support de l'app mobile sont reprises pour le web : adresse claire,
                 telephone joignable, messagerie avant deplacement et paiement prudent.
               </p>
-              <a
-                href="mailto:contact@uty.com"
-                className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#1F4F8C] px-6 py-4 font-black text-white transition hover:-translate-y-0.5 hover:bg-[#173A68]"
-              >
-                <Mail className="h-5 w-5" />
-                Contacter Uty
-              </a>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <a
+                  href={`tel:${SUPPORT_PHONE_HREF}`}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#1F4F8C] px-6 py-4 font-black text-white transition hover:-translate-y-0.5 hover:bg-[#173A68]"
+                >
+                  <LifeBuoy className="h-5 w-5" />
+                  {SUPPORT_PHONE_DISPLAY}
+                </a>
+                <a
+                  href={`mailto:${SUPPORT_EMAIL}`}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[#1F4F8C]/20 bg-white px-6 py-4 font-black text-[#1F4F8C] transition hover:-translate-y-0.5 hover:border-[#1F4F8C]/40"
+                >
+                  <Mail className="h-5 w-5" />
+                  Email support
+                </a>
+              </div>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
