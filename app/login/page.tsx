@@ -10,7 +10,7 @@ import {
 } from '@/lib/services/api';
 import { useAppDispatch } from '@/lib/hooks';
 import { logout, setTokens, setUser } from '@/lib/features/auth/authSlice';
-
+import Image from 'next/image';
 export default function LoginPage() {
   const [showPin, setShowPin] = useState(false);
   const [login, { isLoading }] = useLoginMutation();
@@ -39,11 +39,15 @@ export default function LoginPage() {
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl mb-4">
-              <span className="text-white font-bold text-2xl">U</span>
+    
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4">
+              {/* <span className="text-white font-bold text-2xl">U</span> */}
+               <span className="relative inline-flex h-11 w-11 shrink-0 overflow-hidden rounded-full bg-[#1F4F8C] shadow-[0_12px_30px_rgba(31,79,140,0.22)]">
+                  <Image src="/uty-logo.png" alt="" fill sizes="50px" className="object-cover" />
+               </span>
             </div>
-            <h1 className="text-3xl font-bold text-gray-900">UTY Admin</h1>
-            <p className="text-gray-600 mt-2">Connectez-vous a votre espace d'administration</p>
+            <h1 className="text-3xl font-bold text-gray-900">uty admin</h1>
+            <p className="text-gray-600 mt-2">Connectez-vous à votre espace d'administration</p>
           </div>
 
           <Form
@@ -64,7 +68,7 @@ export default function LoginPage() {
               ]}
             >
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
                 <Input
                   size="large"
                   placeholder="Telephone (ex: 243xxxxxxxxx)"
@@ -150,7 +154,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500 items-center justify-center p-12">
+      <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-blue-600 via-yellow-600 to-yellow-500 items-center justify-center p-12">
         <div className="text-white space-y-8 max-w-lg">
           <div>
             <h2 className="text-4xl font-bold mb-4">Gerez votre plateforme UTY</h2>

@@ -5,14 +5,14 @@ import {
 } from '@reduxjs/toolkit';
 import { api } from './services/api';
 import authReducer from './features/auth/authSlice';
-import { counterSlice } from './features/counter/counterSlice';
+// import { counterSlice } from './features/counter/counterSlice';
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       [api.reducerPath]: api.reducer,
       auth: authReducer,
-      counter: counterSlice.reducer,
+      // counter: counterSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(api.middleware),
