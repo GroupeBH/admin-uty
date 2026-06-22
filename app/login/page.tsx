@@ -132,7 +132,7 @@ export default function LoginPage() {
                 loading={isLoading}
                 className="w-full h-12 text-base font-semibold"
                 style={{
-                  background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                  background: 'linear-gradient(135deg, #3b82f6 0%, #d2f65c 100%)',
                   border: 'none',
                 }}
               >
@@ -141,23 +141,16 @@ export default function LoginPage() {
             </Form.Item>
           </Form>
 
-          <div className="mt-8 p-4 bg-gray-50 rounded-lg">
-            <p className="text-sm font-semibold text-gray-700 mb-2">Compte admin de demonstration :</p>
-            <div className="space-y-1 text-xs text-gray-600">
-              <p>Telephone + PIN: configure dans uty-api</p>
-            </div>
-          </div>
-
           <div className="text-center text-sm text-gray-500">
-            <p>© 2026 UTY Admin. Tous droits reserves.</p>
+            <p>© 2026 uty Admin. Tous droits reserves.</p>
           </div>
         </div>
       </div>
 
-      <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-blue-600 via-yellow-600 to-yellow-500 items-center justify-center p-12">
+      <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-blue-600 via-blue-500 to-yellow-500 items-center justify-center p-12">
         <div className="text-white space-y-8 max-w-lg">
           <div>
-            <h2 className="text-4xl font-bold mb-4">Gerez votre plateforme UTY</h2>
+            <h2 className="text-4xl font-bold mb-4">Gerez votre plateforme uty</h2>
             <p className="text-xl text-blue-100">
               Une interface d'administration complete pour superviser tous les aspects de votre
               marketplace.
@@ -194,10 +187,6 @@ export default function LoginPage() {
                 <p className="text-blue-100">Tracking en temps reel et gestion des livreurs.</p>
               </div>
             </div>
-          </div>
-
-          <div className="pt-8 border-t border-white border-opacity-20">
-            <p className="text-sm text-blue-100">Plateforme securisee avec authentification JWT.</p>
           </div>
         </div>
       </div>
