@@ -407,6 +407,34 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <footer className="border-t border-slate-200 bg-[#F7FAFD] px-6 py-10 sm:px-8 lg:px-10">
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 md:flex-row md:items-end md:justify-between">
+          <div>
+            <UtyLogo />
+            <p className="mt-4 max-w-md text-sm leading-6 text-slate-500">
+              Marketplace, livraison et support pour acheter et vendre plus simplement à Kinshasa.
+            </p>
+          </div>
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-[#1F4F8C]">
+              Informations légales
+            </p>
+            <nav className="mt-3 flex flex-col gap-2 text-sm font-semibold text-slate-600 sm:flex-row sm:gap-6">
+              <a className="transition hover:text-[#1F4F8C]" href="/privacy-policy">
+                Confidentialité
+              </a>
+              <a className="transition hover:text-[#1F4F8C]" href="/terms-and-conditions">
+                Conditions d’utilisation
+              </a>
+              <a className="transition hover:text-[#1F4F8C]" href="/terms-of-sale">
+                Conditions de vente
+              </a>
+            </nav>
+            <p className="mt-5 text-xs text-slate-400">© 2026 GBH SARL. Tous droits réservés.</p>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }

@@ -154,6 +154,33 @@ html {
   box-shadow: 0 24px 70px rgba(31, 79, 140, 0.1);
 }
 
+@keyframes legalEnter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.legal-enter {
+  animation: legalEnter 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.legal-enter:nth-child(2) {
+  animation-delay: 80ms;
+}
+
+.legal-enter:nth-child(3) {
+  animation-delay: 160ms;
+}
+
+.legal-enter:nth-child(4) {
+  animation-delay: 240ms;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -162,7 +189,8 @@ html {
   .uty-hero-enter,
   .uty-phone-float,
   .uty-lift,
-  .uty-lift:hover {
+  .uty-lift:hover,
+  .legal-enter {
     animation: none;
     transform: none;
     transition: none;
