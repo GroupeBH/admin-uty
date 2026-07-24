@@ -140,6 +140,10 @@ type ApiShopPayload = {
   updatedAt?: string;
 };
 
+export type CategoryMutationPayload = Partial<Category> & {
+  imageFile?: File;
+};
+
 const getCookie = (key: string): string | null => {
   if (typeof window === 'undefined') {
     return null;
@@ -511,19 +515,54 @@ const mapApiShopToShop = (value: unknown, index = 0): Shop => {
   };
 };
 
+const toCategoryAttributesPayload = (value: Partial<Category>) =>
+  (value.dynamicFields || []).map((field) => ({
+    name: field.name,
+    type: field.type.toLowerCase(),
+    options: field.options || [],
+    required: field.required,
+  }));
+
 const toCategoryPayload = (value: Partial<Category>) => ({
   name: value.name,
   description: value.description,
   icon: value.icon,
   parentId: value.parentId || undefined,
   isActive: value.isActive,
-  attributes: (value.dynamicFields || []).map((field) => ({
-    name: field.name,
-    type: field.type.toLowerCase(),
-    options: field.options || [],
-    required: field.required,
-  })),
+  attributes: toCategoryAttributesPayload(value),
 });
+
+const appendCategoryFormDataValue = (
+  formData: FormData,
+  key: string,
+  value: string | boolean | undefined
+) => {
+  if (value === undefined) {
+    return;
+  }
+
+  formData.append(key, String(value));
+};
+
+const toCategoryFormData = (value: CategoryMutationPayload): FormData => {
+  const formData = new FormData();
+
+  appendCategoryFormDataValue(formData, 'name', value.name);
+  appendCategoryFormDataValue(formData, 'description', value.description);
+  appendCategoryFormDataValue(formData, 'icon', value.icon);
+  appendCategoryFormDataValue(formData, 'parentId', value.parentId || undefined);
+  appendCategoryFormDataValue(formData, 'isActive', value.isActive);
+  formData.append('attributes', JSON.stringify(toCategoryAttributesPayload(value)));
+
+  if (value.imageFile) {
+    formData.append('image', value.imageFile);
+  }
+
+  return formData;
+};
+
+const toCategoryMutationBody = (value: CategoryMutationPayload) =>
+  value.imageFile ? toCategoryFormData(value) : toCategoryPayload(value);
 
 const mapAuthTokens = (value: ApiAuthTokenResponse): AuthTokens => {
   const accessToken = value.access_token ?? value.accessToken;
@@ -738,11 +777,11 @@ export const api = createApi({
         mapApiCategoryToCategory(response),
       providesTags: ['Category'],
     }),
-    createCategory: builder.mutation<Category, Partial<Category>>({
+    createCategory: builder.mutation<Category, CategoryMutationPayload>({
       query: (data) => ({
         url: '/categories',
         method: 'POST',
-        body: toCategoryPayload(data),
+        body: toCategoryMutationBody(data),
       }),
       transformResponse: (response: ApiCategoryPayload) =>
         mapApiCategoryToCategory(response),
@@ -750,12 +789,12 @@ export const api = createApi({
     }),
     updateCategory: builder.mutation<
       Category,
-      { id: string; data: Partial<Category> }
+      { id: string; data: CategoryMutationPayload }
     >({
       query: ({ id, data }) => ({
         url: `/categories/${id}`,
         method: 'PATCH',
-        body: toCategoryPayload(data),
+        body: toCategoryMutationBody(data),
       }),
       transformResponse: (response: ApiCategoryPayload) =>
         mapApiCategoryToCategory(response),

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { DashboardLayout } from '@/app/components/layout/DashboardLayout';
 import { DataTable } from '@/app/components/common/DataTable';
 import {
@@ -14,9 +14,11 @@ import {
   Space,
   Switch,
   Tag,
+  Upload,
   message,
 } from 'antd';
 import {
+  type CategoryMutationPayload,
   useCreateCategoryMutation,
   useDeleteCategoryMutation,
   useGetCategoriesQuery,
@@ -25,7 +27,8 @@ import {
 import type { Category, DynamicField } from '@/lib/types';
 import { FieldType } from '@/lib/types';
 import type { ColumnsType } from 'antd/es/table';
-import { Edit, Filter, Plus, Search, Trash2 } from 'lucide-react';
+import type { RcFile } from 'antd/es/upload';
+import { Edit, Filter, ImageIcon, Plus, Search, Trash2, UploadCloud, X } from 'lucide-react';
 
 const { Option } = Select;
 
@@ -53,6 +56,9 @@ const isIconUrl = (value?: string): boolean => {
   return /^(https?:\/\/|\/)/i.test(value.trim());
 };
 
+const CATEGORY_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const CATEGORY_IMAGE_MAX_SIZE = 5 * 1024 * 1024;
+
 const parseOptions = (value?: string): string[] => {
   if (!value) {
     return [];
@@ -71,6 +77,9 @@ export default function CategoriesPage() {
   const [parentFilter, setParentFilter] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [categoryImageFile, setCategoryImageFile] = useState<File | null>(null);
+  const [categoryImagePreview, setCategoryImagePreview] = useState('');
+  const watchedIcon = Form.useWatch('icon', form);
 
   const { data: categories = [], isLoading } = useGetCategoriesQuery();
   const [createCategory, { isLoading: isCreating }] = useCreateCategoryMutation();
@@ -107,8 +116,43 @@ export default function CategoriesPage() {
 
   const rootCount = categories.filter((category) => !category.parentId).length;
   const activeCount = categories.filter((category) => category.isActive).length;
+  const normalizedIcon = typeof watchedIcon === 'string' ? watchedIcon.trim() : '';
+  const categoryPreviewSrc =
+    categoryImagePreview || (isIconUrl(normalizedIcon) ? normalizedIcon : '');
+  const categoryPreviewText =
+    !categoryPreviewSrc && normalizedIcon ? normalizedIcon : '';
+
+  useEffect(() => {
+    return () => {
+      if (categoryImagePreview.startsWith('blob:')) {
+        URL.revokeObjectURL(categoryImagePreview);
+      }
+    };
+  }, [categoryImagePreview]);
+
+  const clearCategoryImageSelection = () => {
+    setCategoryImageFile(null);
+    setCategoryImagePreview('');
+  };
+
+  const handleCategoryImageBeforeUpload = (file: RcFile) => {
+    if (!CATEGORY_IMAGE_TYPES.includes(file.type)) {
+      message.error('Formats acceptes: JPG, PNG ou WebP');
+      return Upload.LIST_IGNORE;
+    }
+
+    if (file.size > CATEGORY_IMAGE_MAX_SIZE) {
+      message.error('Image trop volumineuse (max 5 Mo)');
+      return Upload.LIST_IGNORE;
+    }
+
+    setCategoryImageFile(file);
+    setCategoryImagePreview(URL.createObjectURL(file));
+    return false;
+  };
 
   const openCreateModal = () => {
+    clearCategoryImageSelection();
     setEditingCategory(null);
     form.setFieldsValue({
       name: '',
@@ -124,6 +168,7 @@ export default function CategoriesPage() {
   const openEditModal = (category: Category) => {
     const sortedFields = [...category.dynamicFields].sort((a, b) => a.order - b.order);
 
+    clearCategoryImageSelection();
     setEditingCategory(category);
     form.setFieldsValue({
       name: category.name,
@@ -144,6 +189,7 @@ export default function CategoriesPage() {
   const closeModal = () => {
     setIsModalOpen(false);
     setEditingCategory(null);
+    clearCategoryImageSelection();
     form.resetFields();
   };
 
@@ -162,7 +208,7 @@ export default function CategoriesPage() {
       order: index + 1,
     }));
 
-    const payload: Partial<Category> = {
+    const payload: CategoryMutationPayload = {
       name: values.name.trim(),
       description: values.description?.trim() || undefined,
       parentId: values.parentId || undefined,
@@ -170,6 +216,10 @@ export default function CategoriesPage() {
       icon: values.icon?.trim() || undefined,
       dynamicFields,
     };
+
+    if (categoryImageFile) {
+      payload.imageFile = categoryImageFile;
+    }
 
     try {
       if (editingCategory) {
@@ -396,8 +446,59 @@ export default function CategoriesPage() {
                 <Input placeholder="Ex: Electronique" />
               </Form.Item>
 
-              <Form.Item name="icon" label="Icone (URL ou emoji)">
-                <Input placeholder="Ex: https://.../icon.png ou icone texte" />
+              <Form.Item label="Icone ou image">
+                <div className="grid grid-cols-[88px,1fr] gap-3">
+                  <div className="flex h-[88px] w-[88px] items-center justify-center overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+                    {categoryPreviewSrc ? (
+                      <Image
+                        src={categoryPreviewSrc}
+                        alt="Apercu categorie"
+                        width={88}
+                        height={88}
+                        preview={false}
+                        style={{ objectFit: 'cover' }}
+                      />
+                    ) : categoryPreviewText ? (
+                      <span className="max-w-full break-all px-2 text-center text-2xl leading-none">
+                        {categoryPreviewText}
+                      </span>
+                    ) : (
+                      <ImageIcon className="h-6 w-6 text-gray-400" />
+                    )}
+                  </div>
+
+                  <div className="min-w-0 space-y-2">
+                    <Form.Item name="icon" noStyle>
+                      <Input placeholder="Ex: https://.../icon.png ou icone texte" />
+                    </Form.Item>
+
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Upload
+                        accept="image/jpeg,image/png,image/webp"
+                        beforeUpload={handleCategoryImageBeforeUpload}
+                        maxCount={1}
+                        showUploadList={false}
+                      >
+                        <Button icon={<UploadCloud className="w-4 h-4" />}>
+                          Joindre une image
+                        </Button>
+                      </Upload>
+
+                      {categoryImageFile && (
+                        <Button
+                          icon={<X className="w-4 h-4" />}
+                          onClick={clearCategoryImageSelection}
+                        >
+                          Retirer
+                        </Button>
+                      )}
+                    </div>
+
+                    {categoryImageFile && (
+                      <p className="truncate text-xs text-gray-500">{categoryImageFile.name}</p>
+                    )}
+                  </div>
+                </div>
               </Form.Item>
             </div>
 
